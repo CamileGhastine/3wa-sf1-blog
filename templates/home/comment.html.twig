@@ -1,13 +1,20 @@
 <h4 class="text-center">Commentaires</h4>
 <table class="table table-hover">
-	<tbody>
-		{% for comment in post.comments|sort((b, a) => a.createdAt <=> b.createdAt) %}
-			<tr class="table-light">
-				<td>{{ comment.createdAt | date('d/m/y à H:m') }}</td>
-				<td>{{ comment.user.username }}</td>
-				<td>{{ comment.content }}.</td>
-			</tr>
-		{% endfor %}
-	</tbody>
+	{% if app.user %}
+		{# {{ form(commentForm) }} #}
+		{{ form_start(commentForm)}}
+		{{ form_row(commentForm.content)}}
+		{{ form_end(commentForm)}}
+	{% endif %}
 
-</table>
+		<tbody>
+			{% for comment in post.comments|sort((b, a) => a.createdAt <=> b.createdAt) %}
+				<tr class="table-light">
+					<td>{{ comment.createdAt | date('d/m/y à H:i') }}</td>
+					<td>{{ comment.user.username }}</td>
+					<td>{{ comment.content }}.</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+
+	</table>

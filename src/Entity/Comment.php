@@ -6,6 +6,7 @@ use App\Repository\CommentRepository;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
@@ -15,6 +16,13 @@ class Comment
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 2,
+        max: 100,
+        minMessage: 'Minimum {{ limit }} charactères',
+        maxMessage: 'Maximum {{ limit }} charactères',
+    )]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
@@ -28,12 +36,6 @@ class Comment
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
-
-    public function __construct(User $user)
-    {
-        $this->createdAt = new DateTime();
-        $this->user = $user;
-    }
 
     public function getId(): ?int
     {
