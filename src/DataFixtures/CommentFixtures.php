@@ -15,8 +15,9 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         $faker = Faker\Factory::create('fr_FR');
 
         for($i=0; $i<30; $i++) {
-            $comment = new Comment(user: $this->getReference('user' . rand (0, 4)));
+            $comment = new Comment();
             $comment->setContent($faker->paragraph(rand(1, 3)))
+                ->setUser(user: $this->getReference('user' . rand (0, 4)))
                 ->setPost($this->getReference('post' . rand(0, 9)))
                 ->setCreatedAt($faker->dateTimeBetween('-7days'));
 
