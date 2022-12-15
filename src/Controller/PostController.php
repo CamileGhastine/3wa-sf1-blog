@@ -3,13 +3,20 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Post;
 use App\Repository\CategoryRepository;
+use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class PostController extends AbstractController
 {
@@ -47,9 +54,10 @@ class PostController extends AbstractController
         ]); 
     }
 
-    #[Route('/post/{id<[0-9]+>}')]
+    #[Route('/post/{id<[0-9]+>}', name:'show')]
     public function show(Post $post): Response
     {
+        
         return $this->render('home/show.html.twig', [
             'post' => $post
         ]);

@@ -1,19 +1,20 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <div>
-				<div class="card mb-3">
-					<h3 class="card-header">{{ post.title }}</h3>
-                    <img src="{{ post.image }}" alt="{{ post.title }}">
-					<div class="card-body">
-						<p class="card-text">{{ post.description}}</p>
-					</div>
-					<ul class="list-group list-group-flush">
-						<li class="list-group-item">{{ post.author }}</li>
-					</ul>
-					<div class="card-footer text-muted">
-						{{ post.createdAt | date('d/m/Y') }}
-					</div>
-				</div>
-			</div>
-{% endblock %}
+	<div class="card mb-3">
+		<h3 class="card-header">{{ post.title }}</h3>
+		<img src="{{ post.image }}" alt="{{ post.title }}">
+		<div class="card-body">
+			<p class="card-text">{{ post.description}}</p>
+		</div>
+		<ul class="list-group list-group-flush">
+			<li class="list-group-item">{{ post.author }}</li>
+		</ul>
+		<div class="card-footer text-muted">
+			{{ post.createdAt | date('d/m/Y') }}
+		</div>
+	</div>
+</div>
+<div class="container">
+	{% include('home/comment.html.twig') %}
+</div>{% endblock %}
