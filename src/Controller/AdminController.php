@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Form\PostType;
 use App\Repository\PostRepository;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -72,5 +73,33 @@ class AdminController extends AbstractController
         }
 
         return $this->redirectToRoute('admin');
+    }
+
+    
+    #[Route('/admin/post/create', name:'create_post')]
+    #[isGranted('ROLE_ADMIN')]
+    public function create(Request $request, EntityManagerInterface $em): Response
+    {
+        $post = new Post;
+
+        $form = $this->createForm(PostType::class, $post);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $post->setUser($this->getUser())
+                ->setCreatedAt(new DateTime());
+
+            $this->addFlash('success', 'Votre article a été créé avec succès. il ne sera visible que lorsque la case publié sera cochée.');
+            
+            $em->persist($post);
+            $em->flush();
+
+            return $this->redirectToRoute('show', ['id' => $post->getId()]);
+        }
+        
+        return $this->render('admin/create.html.twig', [
+            'postForm' => $form
+        ]);
     }
 }
