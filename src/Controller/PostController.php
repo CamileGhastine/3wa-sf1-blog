@@ -33,7 +33,7 @@ class PostController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(): Response
     {
-        return $this->render('home/index.html.twig', [
+        return $this->render('post/index.html.twig', [
             'posts' =>  $this->postRepository->findAll(),
             'categories' => $this->categoryRepository->findall()
         ]);
@@ -42,7 +42,7 @@ class PostController extends AbstractController
     #[Route('/Post/category/{id<[0-9]+>}', name: 'index_by_category')]
     public function indexByCategory(Category $category)
     {
-        return $this->render('home/index.html.twig', [
+        return $this->render('post/index.html.twig', [
             'posts' => $category->getPosts(),
             'categories' => $this->categoryRepository->findall()
         ]);
@@ -53,7 +53,7 @@ class PostController extends AbstractController
     {
         $search = $request->request->get('search');
 
-        return $this->render('home/index.html.twig', [
+        return $this->render('post/index.html.twig', [
             'posts' => $this->postRepository->findAllBysearch($search),
             'categories' => $this->categoryRepository->findall()
         ]);
@@ -79,7 +79,7 @@ class PostController extends AbstractController
             return $this->redirectToRoute('show', ['id' => $post->getId()]);
         }
 
-        return $this->render('home/show.html.twig', [
+        return $this->render('post/show.html.twig', [
             'post' => $post,
             'commentForm' => $form ?? null
         ]);
