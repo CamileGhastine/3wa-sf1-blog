@@ -5,4 +5,32 @@
 
 {% block body %}
 	<h1>Espace administrateur</h1>
+	<p class="text-end">Ecrire un artilce <a href="">➕</a></p>
+	<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Titre de l'article</th>
+      <th scope="col">Publié</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for post in posts %}
+	<tr class="table-light">
+      <td>{{ post.createdAt | date('d/m/Y à H:i') }}</td>
+      <td><a href="{{ path('show', { 'id' : post.id}) }}">{{ post.title }}</a></td>
+      <td>
+		{% if post.isPublished %}
+			<a href="{{ path('publish_post', { 'id' : post.id }) }}?token={{ csrf_token('publish' ~ post.id) }}">☑️</a>
+		{% else %}
+			<a href="{{ path('publish_post', { 'id' : post.id }) }}?token={{ csrf_token('publish' ~ post.id) }}">◻️</a>
+		{% endif %}
+	  </td>
+      <td><a href="">🖊️</a><a href="{{ path('delete_post', { 'id' : post.id }) }}?token={{ csrf_token('deletePost' ~ post.id) }}">🗑️</a></td>
+    </tr>
+  {% endfor %}
+
+  </tbody>
+</table>
 {% endblock %}
