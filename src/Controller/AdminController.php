@@ -77,52 +77,33 @@ class AdminController extends AbstractController
         return $this->isCsrfTokenValid('publish' . $post->getId(), $token);
     }
 
-
-    #[Route('/post/create', name: 'create_post')]
-    public function create(Request $request): Response
+    #[Route('/post/edit/{id<[0-9]+>?}', name: 'edit_post')]
+    public function edit(Post $post = null, Request $request): Response
     {
-        $post = new Post;
-
+        $isCreatedPost = is_null($post);
+        
+        if($isCreatedPost) $post = new Post;
+        
         $form = $this->createForm(PostType::class, $post);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $post->setUser($this->getUser())
-                ->setCreatedAt(new DateTime());
+            $this->addFlash('success', 'Votre article a été édité avec succès. Il ne sera visible que lorsque la case publié sera cochée.');
+            
+            if($isCreatedPost){
+                $post->setUser($this->getUser())
+                    ->setCreatedAt(new DateTime());
+            }
 
-            $this->addFlash('success', 'Votre article a été créé avec succès. il ne sera visible que lorsque la case publié sera cochée.');
-
-            $this->em->persist($post);
-            $this->em->flush();
-
-            return $this->redirectToRoute('show', ['id' => $post->getId()]);
-        }
-
-        return $this->render('admin/create.html.twig', [
-            'postForm' => $form,
-            'action' => 'create'
-        ]);
-    }
-
-    #[Route('/post/edit/{id<[0-9]+>}', name: 'edit_post')]
-    public function edit(Post $post, Request $request): Response
-    {
-        $form = $this->createForm(PostType::class, $post);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->addFlash('success', 'Votre article a été modifié avec succès. il ne sera visible que lorsque la case publié sera cochée.');
-
-            $this->postRepository->save($post);
-            $this->em->flush();
+            $this->postRepository->save($post, true);
 
             return $this->redirectToRoute('show', ['id' => $post->getId()]);
         }
 
-        return $this->render('admin/create.html.twig', [
+        return $this->render('admin/edit.html.twig', [
             'postForm' => $form,
+            'isCreatedPost' => $isCreatedPost
         ]);
     }
 }

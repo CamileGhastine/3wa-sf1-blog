@@ -2,7 +2,7 @@
 
 {% block body %}
 
-{% set btnAction = ( action is defined and action =='create') ? 'Enrgistrer' : 'Modifier' %}
+{% set btnAction = isCreatedPost ? 'Enrgistrer' : 'Modifier' %}
 
 {{ form_start(postForm) }}
 {{ form_row(postForm.title) }}
