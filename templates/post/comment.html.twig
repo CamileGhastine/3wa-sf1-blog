@@ -12,7 +12,12 @@
 				<tr class="table-light">
 					<td>{{ comment.createdAt | date('d/m/y à H:i') }}</td>
 					<td>{{ comment.user.username }}</td>
-					<td>{{ comment.content }}.</td>
+					<td>{{ comment.content | raw }}.</td>
+					{% if is_granted('ROLE_ADMIN') %}
+						<td><a href="{{ path('delete_comment', { 'id' : comment.id}) }}?token={{ csrf_token('comment' ~ comment.id) }}">🗑️</a></td>
+					{% endif %}
+					
+					
 				</tr>
 			{% endfor %}
 		</tbody>
