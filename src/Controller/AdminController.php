@@ -102,4 +102,26 @@ class AdminController extends AbstractController
             'postForm' => $form
         ]);
     }
+
+    #[Route('/admin/post/edit/{id<[0-9]+>}', name:'edit_post')]
+    #[isGranted('ROLE_ADMIN')]
+    public function edit(Post $post, Request $request, EntityManagerInterface $em, PostRepository $postRepository): Response
+    {
+        $form = $this->createForm(PostType::class, $post);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $this->addFlash('success', 'Votre article a été modifié avec succès. il ne sera visible que lorsque la case publié sera cochée.');
+            
+            $postRepository->save($post);
+            $em->flush();
+
+            return $this->redirectToRoute('show', ['id' => $post->getId()]);
+        }
+        
+        return $this->render('admin/edit.html.twig', [
+            'postForm' => $form
+        ]);
+    }
 }

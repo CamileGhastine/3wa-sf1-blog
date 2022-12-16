@@ -1,0 +1,15 @@
+{% extends('base.html.twig') %}
+
+{% block body %}
+
+{{ form_start(postForm) }}
+{{ form_row(postForm.title) }}
+{{ form_row(postForm.description) }}
+{{ form_row(postForm.image, { 'label' : 'Url de l\'image'}) }}
+{{ form_row(postForm.isPublished, { 'label' : 'Publié'}) }}
+{{ form_row(postForm.categories, { 'label' : 'Catégories'}) }}
+
+<button type="submit" class="btn btn-primary">Modifier</button>
+{{ form_end(postForm) }}
+
+{% endblock %}
