@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PostController extends AbstractController
 {
@@ -62,6 +63,10 @@ class PostController extends AbstractController
     #[Route('/post/{id<[0-9]+>}', name: 'show')]
     public function show(Post $post, Request $request, EntityManagerInterface $em): Response
     {
+        if(!$this->IsGranted('ROLE_ADMIN') && !$post->isIsPublished()) {
+            return $this->redirectToRoute('home');
+        }
+
         $comment = new Comment();
 
         $form = $this->createForm(CommentType::class, $comment);
