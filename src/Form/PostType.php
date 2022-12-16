@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Post;
-use App\Entity\User;
 use App\Entity\Category;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
